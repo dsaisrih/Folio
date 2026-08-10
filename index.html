@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#10141b">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Folio">
+<title>Folio — Tasks &amp; Ideas</title>
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="manifest" href="manifest.json">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ================= GATE (login / setup) ================= -->
+<div id="gate" class="screen gate">
+  <div class="gate-card">
+    <div class="seal" id="seal">
+      <svg viewBox="0 0 64 64" width="56" height="56">
+        <defs>
+          <radialGradient id="sealGrad" cx="35%" cy="30%" r="75%">
+            <stop offset="0%" stop-color="#E9CD84"/>
+            <stop offset="55%" stop-color="#C9A24B"/>
+            <stop offset="100%" stop-color="#9C7A31"/>
+          </radialGradient>
+        </defs>
+        <circle cx="32" cy="32" r="30" fill="url(#sealGrad)"/>
+        <circle cx="32" cy="32" r="30" fill="none" stroke="#7A5D22" stroke-width="1.5" opacity="0.6"/>
+        <circle cx="32" cy="32" r="25" fill="none" stroke="#4A3814" stroke-width="1" opacity="0.35"/>
+        <text x="32" y="42" text-anchor="middle" font-family="Georgia, serif" font-size="30" font-weight="700" fill="#3A2C10">F</text>
+        <path d="M14 46 Q32 54 50 46" stroke="#4A3814" stroke-width="1.4" fill="none" opacity="0.5" stroke-linecap="round"/>
+      </svg>
+    </div>
+
+    <h1 class="wordmark">Folio</h1>
+    <p class="tagline" id="tagline">Tasks and ideas, kept safely.</p>
+
+    <form id="gate-form" autocomplete="off">
+      <label class="field">
+        <span>Email</span>
+        <input type="email" id="email" required placeholder="you@example.com">
+      </label>
+
+      <label class="field">
+        <span>Password</span>
+        <input type="password" id="password" required placeholder="••••••••" minlength="4">
+      </label>
+
+      <label class="field" id="confirm-field" hidden>
+        <span>Confirm password</span>
+        <input type="password" id="confirm" placeholder="••••••••" minlength="4">
+      </label>
+
+      <p class="gate-error" id="gate-error" role="alert" hidden></p>
+
+      <button type="submit" class="btn-primary" id="gate-submit">Enter Folio</button>
+    </form>
+
+    <p class="gate-footnote" id="gate-footnote"></p>
+    <p class="gate-switch"><span id="gate-switch-text">New here?</span> <button type="button" class="link-btn" id="mode-toggle">Create an account</button></p>
+  </div>
+</div>
+
+<!-- ================= DASHBOARD ================= -->
+<div id="dashboard" class="screen dashboard" hidden>
+  <aside class="rail">
+    <div class="rail-brand">
+      <svg viewBox="0 0 64 64" width="30" height="30">
+        <circle cx="32" cy="32" r="30" fill="#C9A24B"/>
+        <text x="32" y="42" text-anchor="middle" font-family="Georgia, serif" font-size="30" font-weight="700" fill="#3A2C10">F</text>
+      </svg>
+      <span>Folio</span>
+    </div>
+
+    <nav class="rail-tabs" id="rail-tabs">
+      <button class="tab-btn active" data-tab="todo">
+        <span class="tab-icon">✓</span> To-do
+      </button>
+      <button class="tab-btn" data-tab="ideas">
+        <span class="tab-icon">✦</span> Ideas
+      </button>
+    </nav>
+
+    <div class="rail-bottom">
+      <button class="btn-ghost" id="logout-btn">Log out</button>
+    </div>
+  </aside>
+
+  <main class="content">
+    <!-- To-do panel -->
+    <section class="panel active" id="panel-todo">
+      <header class="panel-head">
+        <h2>To-do</h2>
+        <p class="panel-sub" id="todo-count"></p>
+      </header>
+
+      <form id="todo-form" class="add-row">
+        <input type="text" id="todo-input" placeholder="Add a task…" required maxlength="140">
+        <input type="date" id="todo-date" aria-label="Due date">
+        <button type="submit" class="btn-primary small">Add</button>
+      </form>
+
+      <div class="list" id="todo-pending"></div>
+
+      <div class="done-wrap" id="done-wrap" hidden>
+        <button class="done-toggle" id="done-toggle">Completed <span id="done-count">(0)</span> <span class="chev">▾</span></button>
+        <div class="list" id="todo-done"></div>
+      </div>
+
+      <p class="empty-state" id="todo-empty" hidden>Nothing on your list. Add your first task above.</p>
+    </section>
+
+    <!-- Ideas panel -->
+    <section class="panel" id="panel-ideas">
+      <header class="panel-head">
+        <h2>Ideas</h2>
+        <p class="panel-sub" id="ideas-count"></p>
+      </header>
+
+      <form id="idea-form" class="idea-add">
+        <input type="text" id="idea-title" placeholder="Idea title…" required maxlength="120">
+        <textarea id="idea-body" placeholder="Jot the details while it's fresh…" rows="3" maxlength="2000"></textarea>
+        <button type="submit" class="btn-primary small">Save idea</button>
+      </form>
+
+      <div class="idea-grid" id="idea-grid"></div>
+
+      <p class="empty-state" id="ideas-empty" hidden>No ideas yet. Capture your first one above.</p>
+    </section>
+  </main>
+</div>
+
+<script type="module" src="app.js"></script>
+</body>
+</html>
