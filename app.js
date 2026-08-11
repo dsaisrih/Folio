@@ -238,13 +238,18 @@ import {
     unsubTodos = onSnapshot(todosQ, (snap) => {
       todosArr = snap.docs.map(d => ({ id: d.id, ...d.data() }));
       renderTodos();
-    }, () => showGateError('Sync error — check your connection.'));
+    }, (err) => {
+      console.error('Firestore todos onSnapshot failed:', err);
+      showGateError(`Sync error — ${err.code || err.message || 'check your connection.'}`);
+    });
 
     const ideasQ = query(collection(db, 'users', uidValue, 'ideas'), orderBy('createdAt', 'desc'));
     unsubIdeas = onSnapshot(ideasQ, (snap) => {
       ideasArr = snap.docs.map(d => ({ id: d.id, ...d.data() }));
       renderIdeas();
-    }, () => {});
+    }, (err) => {
+      console.error('Firestore ideas onSnapshot failed:', err);
+    });
   }
 
   /* ================= DECOY DATA (local only, offline) ================= */
