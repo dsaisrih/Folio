@@ -21,7 +21,9 @@ import {
     db = getFirestore(fbApp);
     // Never persist the session — a page refresh must always ask for the
     // password again, otherwise the safety system below can be skipped.
-    setPersistence(auth, inMemoryPersistence).catch(() => {});
+    setPersistence(auth, inMemoryPersistence).catch((err) => {
+      console.warn('Could not set Firebase persistence:', err);
+    });
   }
 
   /* ---------- local (device-only) keys — used only for the decoy & attempt counter ---------- */
@@ -325,7 +327,10 @@ import {
     if (currentMode === 'real') {
       addDoc(collection(db, 'users', currentUid, 'todos'), {
         text, date: date || '', done: false, createdAt: serverTimestamp()
-      }).catch(() => showGateError('Could not save — check your connection.'));
+      }).catch((err) => {
+        console.error('Firestore addTodo failed:', err);
+        showGateError('Could not save — check your connection.');
+      });
     } else {
       todosArr.unshift({ id: uid(), text, date: date || '', done: false });
       writeJSON(localKey('todos'), todosArr);
@@ -335,7 +340,9 @@ import {
 
   function toggleTodo(t) {
     if (currentMode === 'real') {
-      updateDoc(doc(db, 'users', currentUid, 'todos', t.id), { done: !t.done }).catch(() => {});
+      updateDoc(doc(db, 'users', currentUid, 'todos', t.id), { done: !t.done }).catch((err) => {
+        console.error('Firestore toggleTodo failed:', err);
+      });
     } else {
       t.done = !t.done;
       writeJSON(localKey('todos'), todosArr);
@@ -345,7 +352,9 @@ import {
 
   function deleteTodo(t) {
     if (currentMode === 'real') {
-      deleteDoc(doc(db, 'users', currentUid, 'todos', t.id)).catch(() => {});
+      deleteDoc(doc(db, 'users', currentUid, 'todos', t.id)).catch((err) => {
+        console.error('Firestore deleteTodo failed:', err);
+      });
     } else {
       todosArr = todosArr.filter(x => x.id !== t.id);
       writeJSON(localKey('todos'), todosArr);
@@ -422,7 +431,10 @@ import {
     if (currentMode === 'real') {
       addDoc(collection(db, 'users', currentUid, 'ideas'), {
         title, body: body || '', createdAt: serverTimestamp()
-      }).catch(() => showGateError('Could not save — check your connection.'));
+      }).catch((err) => {
+        console.error('Firestore addIdea failed:', err);
+        showGateError('Could not save — check your connection.');
+      });
     } else {
       ideasArr.unshift({ id: uid(), title, body: body || '', ts: Date.now() });
       writeJSON(localKey('ideas'), ideasArr);
@@ -432,7 +444,9 @@ import {
 
   function deleteIdea(idea) {
     if (currentMode === 'real') {
-      deleteDoc(doc(db, 'users', currentUid, 'ideas', idea.id)).catch(() => {});
+      deleteDoc(doc(db, 'users', currentUid, 'ideas', idea.id)).catch((err) => {
+        console.error('Firestore deleteIdea failed:', err);
+      });
     } else {
       ideasArr = ideasArr.filter(x => x.id !== idea.id);
       writeJSON(localKey('ideas'), ideasArr);
@@ -453,7 +467,9 @@ import {
   /* ---------- installable app hints ---------- */
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
-      navigator.serviceWorker.register('./service-worker.js').catch(() => {});
+      navigator.serviceWorker.register('./service-worker.js').catch((err) => {
+        console.warn('Service worker registration failed:', err);
+      });
     });
   }
 

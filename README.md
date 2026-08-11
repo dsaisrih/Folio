@@ -58,7 +58,24 @@ npx serve .
 
 Then open the local URL shown in the terminal.
 
-## 5. Use it
+## 5. Deploy to Vercel
+This is a static site, so Vercel can deploy it directly with no build step.
+
+1. Push this project to a Git repository, such as GitHub.
+2. Go to https://vercel.com and click **New Project**.
+3. Import your repository, then choose the root directory as `./`.
+4. Set **Application Preset** to **Other**.
+5. Leave **Build Command** blank.
+6. Leave **Output Directory** blank.
+7. Leave **Install Command** blank.
+8. Leave **Environment Variables** empty unless you want to use build-time variables later.
+9. Click **Deploy**.
+
+Once deployment finishes, open the Vercel URL it provides.
+
+> Note: This repo already includes `manifest.json` and `service-worker.js`, so it can behave like an installable web app in supported browsers.
+
+## 6. Use it
 - Create an account or log in
 - Add tasks and ideas
 - Your data syncs to Firebase when you use the real account mode
