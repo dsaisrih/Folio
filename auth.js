@@ -21,8 +21,6 @@ import { getAuth, setPersistence, browserSessionPersistence, createUserWithEmail
   const gateForm = $('gate-form');
   const emailInput = $('email');
   const passInput = $('password');
-  const confirmField = $('confirm-field');
-  const confirmInput = $('confirm');
   const gateError = $('gate-error');
   const gateSubmit = $('gate-submit');
   const tagline = $('tagline');
@@ -34,16 +32,12 @@ import { getAuth, setPersistence, browserSessionPersistence, createUserWithEmail
 
   function renderGateMode() {
     if (gateMode === 'signup') {
-      confirmField.hidden = false;
-      confirmInput.required = true;
       tagline.textContent = 'Set up your private space.';
       gateSubmit.textContent = 'Create my vault';
       footnote.textContent = 'Choose a password you\u2019ll remember — this protects everything you write here.';
       switchText.textContent = 'Already have an account?';
       modeToggle.textContent = 'Log in';
     } else {
-      confirmField.hidden = true;
-      confirmInput.required = false;
       tagline.textContent = 'Tasks and ideas, kept safely.';
       gateSubmit.textContent = 'Enter Folio';
       footnote.textContent = '';
@@ -70,9 +64,7 @@ import { getAuth, setPersistence, browserSessionPersistence, createUserWithEmail
     const password = passInput.value;
 
     if (gateMode === 'signup') {
-      const confirm = confirmInput.value;
       if (password.length < 6) return showGateError('Password should be at least 6 characters.');
-      if (password !== confirm) return showGateError('Passwords don\u2019t match.');
       gateSubmit.disabled = true;
       try {
         await createUserWithEmailAndPassword(auth, email, password);
