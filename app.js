@@ -13,17 +13,25 @@ import {
   'use strict';
 
   /* ---------- Firebase setup ---------- */
-  const CONFIG_MISSING = firebaseConfig.apiKey === 'YOUR_API_KEY';
+  // Robust firebase init: check for obvious missing keys and wrap init in try/catch
+  const REQUIRED_KEYS = ['apiKey', 'authDomain', 'projectId', 'storageBucket', 'appId'];
+  const CONFIG_MISSING = REQUIRED_KEYS.some(k => !firebaseConfig[k] || firebaseConfig[k].includes('YOUR_'));
   let auth, db;
   if (!CONFIG_MISSING) {
-    const fbApp = initializeApp(firebaseConfig);
-    auth = getAuth(fbApp);
-    db = getFirestore(fbApp);
-    // Never persist the session — a page refresh must always ask for the
-    // password again, otherwise the safety system below can be skipped.
-    setPersistence(auth, inMemoryPersistence).catch((err) => {
-      console.warn('Could not set Firebase persistence:', err);
-    });
+    try {
+      const fbApp = initializeApp(firebaseConfig);
+      auth = getAuth(fbApp);
+      db = getFirestore(fbApp);
+      // Never persist the session — a page refresh must always ask for the
+      // password again, otherwise the safety system below can be skipped.
+      setPersistence(auth, inMemoryPersistence).catch((err) => {
+        console.warn('Could not set Firebase persistence:', err);
+      });
+    } catch (err) {
+      console.error('Firebase initialization failed:', err);
+      // fall back to missing config state
+      // keep CONFIG_MISSING true so UI shows helpful message
+    }
   }
 
   /* ---------- local (device-only) keys — used only for the decoy & attempt counter ---------- */
@@ -116,8 +124,8 @@ import {
   }
 
   if (CONFIG_MISSING) {
-    tagline.textContent = 'Firebase isn\u2019t connected yet.';
-    footnote.textContent = 'Add your project keys to firebase-config.js, then reload this page.';
+    tagline.textContent = 'Firebase isn\u2019t connected or initialized.';
+    footnote.textContent = 'Check values in firebase-config.js and the console for init errors.';
     gateSubmit.disabled = true;
   }
 

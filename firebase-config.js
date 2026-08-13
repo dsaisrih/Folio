@@ -4,7 +4,8 @@ export const firebaseConfig = {
   apiKey: "AIzaSyBl_-300m0XzGxVH8ylc6aLt3GWZTQjINw",
   authDomain: "folio-5a349.firebaseapp.com",
   projectId: "folio-5a349",
-  storageBucket: "folio-5a349.firebasestorage.app",
+  // corrected storage bucket hostname (use the value from Firebase console)
+  storageBucket: "folio-5a349.appspot.com",
   messagingSenderId: "887014792666",
   appId: "1:887014792666:web:e40171b171dc4c0c6634e3",
   measurementId: "G-R5R57X3K6W"
