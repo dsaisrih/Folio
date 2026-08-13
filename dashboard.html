@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#10141b">
+<title>Folio — Dashboard</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="dashboard" class="screen dashboard">
+  <aside class="rail">
+    <div class="rail-brand">
+      <svg viewBox="0 0 64 64" width="30" height="30"><circle cx="32" cy="32" r="30" fill="#C9A24B"/></svg>
+      <span>Folio</span>
+    </div>
+
+    <nav class="rail-tabs" id="rail-tabs">
+      <button class="tab-btn active" data-tab="todo">
+        <span class="tab-icon">✓</span> To-do
+      </button>
+      <button class="tab-btn" data-tab="ideas">
+        <span class="tab-icon">✦</span> Ideas
+      </button>
+      <button class="tab-btn" data-tab="purchases">
+        <span class="tab-icon">🧾</span> Purchases
+      </button>
+      <button class="tab-btn" data-tab="daily">
+        <span class="tab-icon">📔</span> Daily
+      </button>
+    </nav>
+
+    <div class="rail-bottom">
+      <button class="btn-ghost" id="logout-btn">Log out</button>
+    </div>
+  </aside>
+
+  <main class="content">
+    <!-- To-do panel -->
+    <section class="panel active" id="panel-todo">
+      <header class="panel-head">
+        <h2>To-do</h2>
+        <p class="panel-sub" id="todo-count"></p>
+      </header>
+
+      <form id="todo-form" class="add-row">
+        <input type="text" id="todo-input" placeholder="Add a task…" required maxlength="140">
+        <input type="date" id="todo-date" aria-label="Due date">
+        <button type="submit" class="btn-primary small">Add</button>
+      </form>
+
+      <div class="list" id="todo-pending"></div>
+
+      <div class="done-wrap" id="done-wrap" hidden>
+        <button class="done-toggle" id="done-toggle">Completed <span id="done-count">(0)</span> <span class="chev">▾</span></button>
+        <div class="list" id="todo-done"></div>
+      </div>
+
+      <p class="empty-state" id="todo-empty" hidden>Nothing on your list. Add your first task above.</p>
+    </section>
+
+    <!-- Daily panel -->
+    <section class="panel" id="panel-daily">
+      <header class="panel-head">
+        <h2>Daily Log</h2>
+        <p class="panel-sub" id="daily-count"></p>
+      </header>
+
+      <form id="daily-form" class="add-row">
+        <input type="date" id="daily-date" required>
+        <input type="text" id="daily-title" placeholder="Title" maxlength="120">
+        <input type="text" id="daily-entry" placeholder="Quick note or summary" maxlength="500">
+        <button type="submit" class="btn-primary small">Add entry</button>
+      </form>
+
+      <div class="daily-controls">
+        <button id="export-daily-csv" class="btn-ghost">Export CSV</button>
+        <button id="export-daily-pdf" class="btn-ghost">Export PDF</button>
+      </div>
+
+      <div class="list" id="daily-list"></div>
+      <p class="empty-state" id="daily-empty" hidden>No daily entries yet.</p>
+    </section>
+
+    <!-- Ideas panel -->
+    <section class="panel" id="panel-ideas">
+      <header class="panel-head">
+        <h2>Ideas</h2>
+        <p class="panel-sub" id="ideas-count"></p>
+      </header>
+
+      <form id="idea-form" class="idea-add">
+        <input type="text" id="idea-title" placeholder="Idea title…" required maxlength="120">
+        <textarea id="idea-body" placeholder="Jot the details while it's fresh…" rows="3" maxlength="2000"></textarea>
+        <button type="submit" class="btn-primary small">Save idea</button>
+      </form>
+
+      <div class="idea-grid" id="idea-grid"></div>
+
+      <p class="empty-state" id="ideas-empty" hidden>No ideas yet. Capture your first one above.</p>
+    </section>
+
+    <!-- Expenditures panel -->
+    <section class="panel" id="panel-purchases">
+      <header class="panel-head">
+        <h2>Expenditures</h2>
+        <p class="panel-sub" id="purchases-count"></p>
+      </header>
+
+      <form id="purchase-form" class="add-row">
+        <input type="date" id="purchase-date" required>
+        <input type="text" id="purchase-vendor" placeholder="Vendor" required maxlength="120">
+        <input type="text" id="purchase-desc" placeholder="Description" maxlength="250">
+        <input type="number" id="purchase-amount" placeholder="Amount" step="0.01" required>
+        <select id="purchase-category">
+          <option value="general">General</option>
+          <option value="office">Office</option>
+          <option value="food">Food</option>
+          <option value="other">Other</option>
+        </select>
+        <button type="submit" class="btn-primary small">Add expenditure</button>
+      </form>
+
+      <div class="purchase-controls">
+        <label for="expenditures-month">Filter month:</label>
+        <input type="month" id="expenditures-month">
+        <button id="expenditures-clear" class="btn-ghost">Clear</button>
+        <div id="expenditures-total" style="margin-left:12px;font-weight:600">Total: $0.00</div>
+        <div style="margin-left:auto">
+          <button id="export-csv" class="btn-ghost">Export CSV</button>
+          <button id="export-xlsx" class="btn-ghost">Export Excel</button>
+          <button id="export-pdf" class="btn-ghost">Export PDF</button>
+        </div>
+      </div>
+
+      <div class="list" id="purchase-list"></div>
+      <p class="empty-state" id="purchases-empty" hidden>No expenditures yet. Add your first one above.</p>
+    </section>
+  </main>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script type="module" src="dashboard.js"></script>
+</body>
+</html>

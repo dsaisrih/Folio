@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#10141b">
+<title>Folio — Login</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="gate" class="screen gate">
+  <div class="gate-card">
+    <div class="seal" id="seal">
+      <!-- seal svg omitted for brevity; small decorative element -->
+      <svg viewBox="0 0 64 64" width="56" height="56"><circle cx="32" cy="32" r="30" fill="#C9A24B"/></svg>
+    </div>
+
+    <h1 class="wordmark">Folio</h1>
+    <p class="tagline" id="tagline">Tasks and ideas, kept safely.</p>
+
+    <form id="gate-form" autocomplete="off">
+      <label class="field">
+        <span>Email</span>
+        <input type="email" id="email" required placeholder="you@example.com">
+      </label>
+
+      <label class="field">
+        <span>Password</span>
+        <input type="password" id="password" required placeholder="••••••••" minlength="4">
+      </label>
+
+      <label class="field" id="confirm-field" hidden>
+        <span>Confirm password</span>
+        <input type="password" id="confirm" placeholder="••••••••" minlength="4">
+      </label>
+
+      <p class="gate-error" id="gate-error" role="alert" hidden></p>
+
+      <button type="submit" class="btn-primary" id="gate-submit">Enter Folio</button>
+    </form>
+
+    <p class="gate-footnote" id="gate-footnote"></p>
+    <p class="gate-switch"><span id="gate-switch-text">New here?</span> <button type="button" class="link-btn" id="mode-toggle">Create an account</button></p>
+  </div>
+</div>
+
+<script type="module" src="auth.js"></script>
+</body>
+</html>
